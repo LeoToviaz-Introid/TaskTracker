@@ -1,6 +1,5 @@
 'use client';
 
-import './styles/tic-tac.css';
 import { useState } from 'react';
 
 export default function Board() {
