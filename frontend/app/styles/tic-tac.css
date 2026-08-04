@@ -1,0 +1,10 @@
+.square {
+    border: 1.5px gray solid;
+    display: inline;
+
+    width: 30px;
+    height: 30px;
+}
+.square-row {
+    display: flex;
+}

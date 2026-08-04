@@ -1,69 +1,93 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import './styles/tic-tac.css';
+import { useState } from 'react';
+
+export default function Board() {
+  let [turn, setTurn] = useState(0);  // impares para "X", pares para "O", 
+  const [squares, setSquares] = useState(Array(9).fill(null));
+  // no se usa estado porque esta funcion se ejecuta con cada renderizado
+  // del componente; el componente solo se renderiza cuando hay click
+  // en una casilla
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) status = `Ganador ${winner}!`;
+  else {
+    if (turn & 1) status = `Turno de X`;
+    else status = `Turno de O`;
+  }
+
+  function handleClick(squareIndex) {
+    // que no haga nada la funcion en casillas ya marcadas
+    if (squares[squareIndex] || calculateWinner(squares)) return;
+
+    // implementacion con inmutabilidad (cambiar todo del objeto de una
+    // para que react compare referencias y sepa en un nanosegundo que
+    // el objeto cambió para asi re-renderizarlo)
+    const newSquares = squares.slice();
+    if (turn & 1) newSquares[squareIndex] = "X";
+    else newSquares[squareIndex] = "O";
+    setTurn(++turn);
+    setSquares(newSquares);
+    // implementacion con mutabilidad (se modifica el objeto en memoria
+    // directamente), react tiene que hacer un ciclo lineal para saber
+    // si el objeto cambio en memoria y como es una operacion muy lenta
+    // no renderiza de nuevo el componente, "en teoria segun gemini"
+    //squares[squareIndex] = "O";
+    //setSquares(squares);
+  }
+
+  return <>
+  <div>Status: {status}</div> {/* ganador x o sig. turno x */}
+  <div className="square-row">
+    {/* <Square value={1} /> */}
+    {/*<Square value={squares[0]} onSquareClick={handleClick(0)} />*/}
+    <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+    <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+    <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+  </div>
+  <div className="square-row">
+    <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+    <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+    <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+  </div>
+  <div className="square-row">
+    <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+    <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+    <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+  </div>
+  </>;
+}
+// funcion copiada de https://react.dev/learn/tutorial-tic-tac-toe#declaring-a-winner
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+
+function Square({ value, onSquareClick }) {
+  //const [value, setValue] = useState(null);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <button
+      className="square"
+      onClick={onSquareClick}
+    >
+      {value}
+    </button>
   );
 }
