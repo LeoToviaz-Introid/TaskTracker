@@ -51,7 +51,7 @@ export function Sidebar() {
         ${isCollapsed ? "hidden" : "block"}
       `}
       >
-        Dashboard
+        <Link href="/">Dashboard</Link>
       </button>
       <div
         className={`
@@ -61,7 +61,7 @@ export function Sidebar() {
         `}
       >
         <button className="p-2 bg-emerald-400 hover:bg-emerald-500 focus:bg-emerald-600 cursor-pointer">
-          Proyectos
+          <Link href="/projects">Proyectos</Link>
         </button>
         {/** -------- flecha al lado de Proyectos -------- */}
         <div
