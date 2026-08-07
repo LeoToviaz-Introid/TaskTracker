@@ -41,7 +41,7 @@ export function Sidebar() {
   return (
     <aside
       className={`
-        flex flex-col shrink-0 h-screen p-0 m-0 bg-emerald-300 text-white transition-all duration-300 ease-in-out divide-y divide-white/40
+        absolute flex flex-col shrink-0 h-screen p-0 m-0 bg-emerald-300 text-white transition-all duration-300 ease-in-out divide-y divide-white/40
       `}
     >
       <button
@@ -51,7 +51,7 @@ export function Sidebar() {
         ${isCollapsed ? "hidden" : "block"}
       `}
       >
-        Dashboard
+        <Link href="/">Dashboard</Link>
       </button>
       <div
         className={`
@@ -61,7 +61,7 @@ export function Sidebar() {
         `}
       >
         <button className="p-2 bg-emerald-400 hover:bg-emerald-500 focus:bg-emerald-600 cursor-pointer">
-          Proyectos
+          <Link href="/projects">Proyectos</Link>
         </button>
         {/** -------- flecha al lado de Proyectos -------- */}
         <div
