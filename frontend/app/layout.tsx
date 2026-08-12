@@ -20,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="flex min-h-screen">
+    <html lang="en" className="bg-gray-700">
+      <body className="w-9/10 max-w-7xl min-h-full my-0 mx-auto flex">
         <Sidebar />
         <main className="flex-1">{children}</main>
       </body>
