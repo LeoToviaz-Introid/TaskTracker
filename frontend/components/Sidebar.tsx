@@ -41,7 +41,7 @@ export function Sidebar() {
   return (
     <aside
       className={`
-        absolute flex flex-col shrink-0 h-screen p-0 m-0 bg-emerald-300 text-white transition-all duration-300 ease-in-out divide-y divide-white/40
+        fixed top-0 left-0 flex flex-col shrink-0 h-screen p-0 m-0 bg-emerald-300 text-white transition-all duration-300 ease-in-out divide-y divide-white/40
       `}
     >
       <button
