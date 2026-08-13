@@ -1,13 +1,11 @@
+import Header from "@/components/Header";
 import ProyectosRecientes from "@/components/ProyectosRecientes";
 import TareasUrgentes from "@/components/TareasUrgentes";
 
 export default function Page() {
   return (
-    <div className="flex flex-col h-screen text-white">
-      {/** --------===== fila 1 =====-------- */}
-      <div className="flex flex-col justify-center bg-zinc-700 grow-2">
-        <h2 className="text-2xl ml-6">Inicio</h2>
-      </div>
+    <>
+      <Header title={<h1 className="text-2xl">Inicio</h1>}/>
       {/** --------===== fila 1 =====-------- */}
       {/** --------===== fila 2 =====-------- */}
       <div className="flex bg-zinc-700 grow-4">
@@ -72,6 +70,6 @@ export default function Page() {
         </div>
       </div>
       {/** --------===== fila 3 =====-------- */}
-    </div>
+    </>
   );
 }
