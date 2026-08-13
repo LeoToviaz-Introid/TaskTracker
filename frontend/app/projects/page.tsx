@@ -1,11 +1,6 @@
-"use client";
-
-import { useEffect } from "react";
-import { useState } from "react";
-
 import Header from "@/components/Header";
 import NewModelButton from "@/components/NewModelButton";
-import TablaProyectos from "@/components/TablaProyectos";
+import ProjectsTable from "@/components/ProjectsTable";
 
 export default function Page() {
   return (
@@ -24,7 +19,7 @@ export default function Page() {
 
       <div className="bg-zinc-700 flex justify-center items-start p-4 md:p-8 overflow-y-auto">
         <div className="w-full max-w-6xl">
-          <TablaProyectos />
+          <ProjectsTable />
         </div>
       </div>
     </>
