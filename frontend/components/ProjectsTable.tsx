@@ -1,13 +1,7 @@
-import { Info, Pencil, Trash2 } from "lucide-react";
+import ProjectActions from "./ProjectActions";
 
 export default async function ProjectsTable() {
-  const proyectos = [
-    { id: 1, nombre: "Rediseño Web", estado: "En Proceso", fecha: "2026-03-15", },
-    { id: 2, nombre: "App Móvil", estado: "Completado", fecha: "2026-02-10" },
-  ];
-  const proyectosReales = await getProjects();
-  console.log("proeyctos simulados, " + proyectos)
-  console.log("proeyctos reales, " + proyectosReales)
+  const proyectos = await getProjects();
 
   return (
     <div className="w-full">
@@ -23,33 +17,16 @@ export default async function ProjectsTable() {
           {proyectos.map((el) => (
             <tr
               key={el.id}
-              className="bg-emerald-400 border border-white mb-4 p-4 block md:table-row md:mb-0 md:p-0 md:border-b"
+              className="bg-emerald-400 border mb-4 p-4 block md:table-row md:mb-0 md:p-0 md:border-b"
             >
-              <td className="p-2 flex justify-between border-b border-white md:border-b-0 md:p-3 md:table-cell md:justify-start">
+              <td className="p-2 flex justify-between border-b md:border-b-0 md:p-3 md:table-cell md:justify-start">
                 <span className="font-bold md:hidden">Proyecto:</span>{" "}
-                {el.nombre}
+                {el.name}
               </td>
-              <td className="p-2  flex items-center justify-between md:p-3 md:table-cell">
+              <td className="p-2 flex items-center justify-between md:p-3 md:table-cell">
                 <span className="font-bold md:hidden">Acciones: </span>
                 <div className="flex items-center gap-4 md:justify-end">
-                  <button
-                    className="hover:opacity-80 transition-opacity cursor-pointer"
-                    onClick={() => console.log("ver")}
-                  >
-                    <Info className="w-5 h-5" />
-                  </button>
-                  <button
-                    className="hover:opacity-80 transition-opacity cursor-pointer"
-                    onClick={() => console.log("editar")}
-                  >
-                    <Pencil className="w-5 h-5" />
-                  </button>
-                  <button
-                    className="hover:opacity-80 transition-opacity cursor-pointer"
-                    onClick={() => console.log("borrar")}
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
+                  <ProjectActions />
                 </div>
               </td>
             </tr>
