@@ -38,8 +38,8 @@ export default async function ProjectsTable() {
 }
 
 async function getProjects() {
-  // obtener datos de API proyectos
-  const res = await fetch("http://localhost:8000/projects", {
+  // obtener proyectos
+  const res = await fetch("http://localhost:8000/projects/", {
     method: "GET",
     next: { tags: ["projects"] },
   });
