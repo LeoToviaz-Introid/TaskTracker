@@ -10,4 +10,7 @@ router.register(r'tasks', TaskViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('projects/<int:project_id>/tasks/',
+        ProjectTasksView.as_view(),
+        name='project-tasks'),
 ]
