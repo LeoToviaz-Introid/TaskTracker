@@ -1,0 +1,238 @@
+"use client";
+
+import { useEffect } from "react";
+import { useState } from "react";
+import { createPortal } from "react-dom";
+
+import { Plus } from "lucide-react";
+import { X } from "lucide-react";
+
+import { refreshTag } from "@/app/actions";
+
+export default function NewTaskButton({ text = "Nueva Tarea" }) {
+  // true cuando este siendo mostrado el popup de nuevo proyecto y false en caso contrario
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        onClick={() => setIsPopupOpen(true)}
+        className="bg-emerald-400 hover:bg-emerald-500 text-zinc-900 font-medium px-4 py-2 flex items-center gap-2 border border-emerald-500 cursor-pointer"
+      >
+        {text} <Plus className="w-5 h-5" />
+      </button>
+
+      <NewTaskPopup
+        formTitle={text}
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+      />
+    </>
+  );
+}
+
+function NewTaskPopup({ formTitle, isOpen, onClose }) {
+  // estos check ayudan a verificar que el componente no se renderice
+  // fuera del navegador, intentar acceder a document.body causará error
+  if (!isOpen || typeof window === "undefined") return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="w-full max-w-md bg-zinc-800 p-6 text-white shadow-xl border border-zinc-700 relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white hover:text-zinc-200 cursor-pointer"
+        >
+          <X className="w-5 h-5" />
+        </button>
+        <h3 className="text-xl font-semibold mb-4">{formTitle}</h3>
+        <NewTaskForm onClose={onClose} />
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+function NewTaskForm({ onClose }) {
+  const [taskName, setTaskName] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
+  const [taskProjectId, setTaskProjectId] = useState("");
+  const [taskEstado, setTaskEstado] = useState("");
+  const [taskPriority, setTaskPriority] = useState("");
+  const [taskDueDate, setTaskDueDate] = useState("");
+
+  const [projects, setProjects] = useState([]);
+  // true mientras aun no hayan sido cargados en memoria los proyectos disponibles,
+  // una vez que cargan los proyectos, la variable cambia a false
+  // el contenido renderizado en el formulario cambia dependiendo de este estado
+  const [loadingProjects, setLoadingProjects] = useState(true);
+
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        // Asegúrate de usar el endpoint correcto para listar proyectos
+        const response = await fetch("http://localhost:8000/projects/");
+        if (response.ok) {
+          const data = await response.json();
+          setProjects(data);
+        } else {
+          console.error("Error al obtener proyectos");
+        }
+      } catch (error) {
+        console.error("Error de red al consultar proyectos:", error);
+      } finally {
+        setLoadingProjects(false);
+      }
+    }
+
+    fetchProjects();
+  }, []);
+
+  // true mientras se este enviando la petición al servidor, el botón de enviar
+  // se desactiva mientras la petición este en progreso
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const data = {
+      name: taskName,
+      description: taskDescription,
+      project: Number(taskProjectId),
+      estado: taskEstado,
+      priority: taskPriority,
+      due_date: taskDueDate,
+    };
+    console.log(data);
+
+    const response = await fetch("http://localhost:8000/tasks/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok)
+      throw new Error(`Error al crear la tarea: ${response.statusText}`);
+
+    const createdTask = await response.json();
+    console.log("Tarea creada exitosamente:", createdTask);
+
+    // limpiar el formulario y cerrar
+    setTaskName("");
+    setTaskDescription("");
+    setTaskProjectId("");
+    setTaskEstado("");
+    setTaskPriority("");
+    setTaskDueDate("");
+    onClose();
+    refreshTag("project-tasks");
+    //router.refresh();
+    setIsSubmitting(false);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <div>
+        {/* -------- Name -------- */}
+        <label className="block text-sm font-medium mb-1">Nombre</label>
+        <input
+          type="text"
+          required
+          value={taskName}
+          onChange={(e) => setTaskName(e.target.value)}
+          placeholder="Escribe el nombre de la tarea"
+          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500"
+        />
+        {/* -------- Description -------- */}
+        <label className="block text-sm font-medium mt-1 mb-1">
+          Descripción
+        </label>
+        <input
+          type="text"
+          required
+          value={taskDescription}
+          onChange={(e) => setTaskDescription(e.target.value)}
+          placeholder="Escribe la descripción"
+          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500"
+        />
+        {/* -------- Proyecto -------- */}
+        <label className="block text-sm font-medium mt-3 mb-1">Proyecto</label>
+        <select
+          required
+          value={taskProjectId}
+          onChange={(e) => setTaskProjectId(e.target.value)}
+          disabled={loadingProjects}
+          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500 cursor-pointer disabled:opacity-50"
+        >
+          <option value="" disabled>
+            {loadingProjects
+              ? "Cargando proyectos..."
+              : "Selecciona un proyecto"}
+          </option>
+          {projects.map((project) => (
+            <option key={project.id} value={project.id}>
+              {project.name}
+            </option>
+          ))}
+        </select>
+        {/* -------- Estado -------- */}
+        <label className="block text-sm font-medium mt-1 mb-1">Estado</label>
+        <select
+          required
+          value={taskEstado}
+          onChange={(e) => setTaskEstado(e.target.value)}
+          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500 cursor-pointer"
+        >
+          <option value="" disabled>
+            Selecciona un estado
+          </option>
+          <option value="pending">Pendiente</option>
+          <option value="in_progress">En Progreso</option>
+          <option value="completed">Completado</option>
+        </select>
+        {/* -------- Prioridad -------- */}
+        <label className="block text-sm font-medium mt-1 mb-1">Prioridad</label>
+        <select
+          required
+          value={taskPriority}
+          onChange={(e) => setTaskPriority(e.target.value)}
+          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500 cursor-pointer"
+        >
+          <option value="" disabled>
+            Selecciona la prioridad
+          </option>
+          <option value="high">Alta</option>
+          <option value="medium">Media</option>
+          <option value="low">Baja</option>
+        </select>
+        {/* -------- Fecha de Vencimiento -------- */}
+        <label className="block text-sm font-medium mt-1 mb-1">
+          Fecha de Vencimiento
+        </label>
+        <input
+          type="date"
+          required
+          value={taskDueDate}
+          onChange={(e) => setTaskDueDate(e.target.value)}
+          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500 [color-scheme:dark]"
+        />
+      </div>
+
+      <div className="flex justify-end gap-2 mt-2">
+        <button
+          type="button"
+          onClick={onClose}
+          className="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-sm font-medium cursor-pointer"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-zinc-900 text-sm font-semibold cursor-pointer"
+        >
+          {isSubmitting ? "Guardando..." : "Enviar"}
+        </button>
+      </div>
+    </form>
+  );
+}
