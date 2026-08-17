@@ -26,7 +26,7 @@ export default async function ProjectsTable() {
               <td className="p-2 flex items-center justify-between md:p-3 md:table-cell">
                 <span className="font-bold md:hidden">Acciones: </span>
                 <div className="flex items-center gap-4 md:justify-end">
-                  <ProjectActions />
+                  <ProjectActions project={el}/>
                 </div>
               </td>
             </tr>

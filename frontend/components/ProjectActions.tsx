@@ -1,6 +1,10 @@
 "use client";
 
+import Link from "next/link";
+
 import { Info, Pencil, Trash2 } from "lucide-react";
+
+import { refreshTag } from "@/app/actions";
 
 /**
  * Conjunto de íconos pulsables (botones) para realizar operaciones CRUD sobre un proyecto en específico.
@@ -12,14 +16,21 @@ import { Info, Pencil, Trash2 } from "lucide-react";
  * @example
  * <ProjectActions >
  */
-export default function ProjectActions() {
+export default function ProjectActions({project}) {
+  const deleteProject = async () => {
+    if (!confirm("¿Eliminar proyecto?")) return;
+    const res = await fetch(`http://localhost:8000/projects/${project.id}/`, {
+      method: "DELETE",
+    });
+    if (res.ok) refreshTag("projects");
+  };
+
   return (
     <>
       <button
         className="hover:opacity-80 transition-opacity cursor-pointer"
-        onClick={() => console.log("ver")}
       >
-        <Info className="w-5 h-5" />
+        <Link href={`/projects/${project.id}`}><Info className="w-5 h-5" /></Link>
       </button>
       <button
         className="hover:opacity-80 transition-opacity cursor-pointer"
@@ -29,7 +40,7 @@ export default function ProjectActions() {
       </button>
       <button
         className="hover:opacity-80 transition-opacity cursor-pointer"
-        onClick={() => console.log("borrar")}
+        onClick={deleteProject}
       >
         <Trash2 className="w-5 h-5" />
       </button>
