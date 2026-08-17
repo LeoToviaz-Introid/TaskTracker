@@ -74,8 +74,7 @@ function NewProjectForm({ onClose }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    if (!response.ok)
-      throw new Error(`Error al el proyecto: ${response.statusText}`);
+    if (!response.ok) throw new Error(`Error al crear el proyecto: ${response.statusText}`);
 
     const createdProject = await response.json();
     console.log("Proyecto creado exitosamente:", createdProject);
