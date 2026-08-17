@@ -1,5 +1,5 @@
+import CreateEditProjectButton from "@/components/CreateEditProjectButton";
 import Header from "@/components/Header";
-import NewProjectButton from "@/components/NewProjectButton";
 import ProjectsTable from "@/components/ProjectsTable";
 
 export default function Page() {
@@ -8,7 +8,7 @@ export default function Page() {
       <Header
         title={<h2 className="text-lg">Proyectos</h2>}
         text={""}
-        button={<NewProjectButton />}
+        button={<CreateEditProjectButton />}
         description={<p className="text-sm text-zinc-700"></p>}
       />
 

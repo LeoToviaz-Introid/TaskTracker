@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 
-import { Info, Pencil, Trash2 } from "lucide-react";
+import { Info, Trash2 } from "lucide-react";
 
 import { refreshTag } from "@/app/actions";
+
+import CreateEditProjectButton from "./CreateEditProjectButton";
 
 /**
  * Conjunto de íconos pulsables (botones) para realizar operaciones CRUD sobre un proyecto en específico.
@@ -14,7 +16,7 @@ import { refreshTag } from "@/app/actions";
  * del cliente para mantener el caché de Next y una sintaxis más limpia.
  * 
  * @example
- * <ProjectActions >
+ * <ProjectActions />
  */
 export default function ProjectActions({project}) {
   const deleteProject = async () => {
@@ -36,7 +38,7 @@ export default function ProjectActions({project}) {
         className="hover:opacity-80 transition-opacity cursor-pointer"
         onClick={() => console.log("editar")}
       >
-        <Pencil className="w-5 h-5" />
+        <CreateEditProjectButton project={project} />
       </button>
       <button
         className="hover:opacity-80 transition-opacity cursor-pointer"
