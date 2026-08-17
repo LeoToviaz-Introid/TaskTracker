@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import NewModelButton from "@/components/NewModelButton";
+import NewTaskButton from "@/components/NewTaskButton";
 import TaskList from "@/components/TaskList";
 
 export default async function Page({ params }: PageProps) {
@@ -16,12 +16,7 @@ export default async function Page({ params }: PageProps) {
       <Header
         title={<h2>{project.name}</h2>}
         text={`${completedTasks.length}/${projectTasks.length}`}
-        button={
-          <NewModelButton
-            text="Nueva Tarea"
-            placeholder="Escribe el nombre de la tarea"
-          />
-        }
+        button={<NewTaskButton/>}
         description={
           <p className="text-sm text-zinc-700">{project.description}</p>
         }
