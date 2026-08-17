@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -34,14 +35,32 @@ export function Sidebar() {
       url: "/projects/2",
     },
   ]);
-  // true mientras la pagina este cargando datos de la API proyectos
-  // false cuando no, por el momento no se usa debido a datos simulados
-  const [loading, setLoading] = useState(false);
+  // true mientras aun no hayan sido cargados en memoria los proyectos disponibles,
+  // una vez que cargan los proyectos, la variable cambia a false
+  // el contenido renderizado en el Sidebar cambia dependiendo de este estado
+  const [loadingProjects, setLoadingProjects] = useState(true);
 
+  useEffect(() => {
+    async function fetchProjects() {
+      const res = await fetch("http://localhost:8000/projects/", {
+        method: "GET",
+        next: { tags: ["projects"] },
+      });
+      if (!res.ok) throw new Error(`Error al el proyecto: ${res.statusText}`);
+      setProyectos(await res.json());
+
+
+      setLoadingProjects(false);
+    }
+
+    fetchProjects();
+  }, []);
+  // limita la cantidad de objetos a renderizar
+  proyectos.slice(0, 5);
   return (
     <aside
       className={`
-        fixed top-0 left-0 flex flex-col shrink-0 h-screen p-0 m-0 bg-emerald-300 text-white transition-all duration-300 ease-in-out divide-y divide-white/40
+        fixed top-0 left-0 flex flex-col shrink-0 h-screen p-0 m-0 bg-emerald-300 text-white transition-all duration-300 ease-in-out divide-y divide-white/40 max-w-26.5 overflow-hidden
       `}
     >
       <button
@@ -70,9 +89,7 @@ export function Sidebar() {
             relative
             ${isCollapsed ? "-rotate-90" : ""}
           `}
-          onMouseEnter={() => {
-            setIsHovered(true);
-          }}
+          onMouseEnter={() => setIsHovered(true) }
           onMouseLeave={() => setIsHovered(false)}
         >
           <ChevronDown
@@ -93,7 +110,7 @@ export function Sidebar() {
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              {loading ? (
+              {loadingProjects ? (
                 <div className="flex items-center justify-center pt-2 pb-2 text-sm text-emerald-100">
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
                   Cargando...
@@ -102,10 +119,10 @@ export function Sidebar() {
                 proyectos.map((item) => (
                   <Link
                     key={item.id}
-                    href={item.url}
+                    href={`http://localhost:3000/projects/${item.id}` }
                     className="block px-4 py-2 text-sm text-white hover:bg-emerald-700 transition-colors"
                   >
-                    {item.nombre}
+                    {item.name}
                   </Link>
                 ))
               ) : (
