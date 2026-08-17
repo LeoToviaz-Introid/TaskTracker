@@ -3,34 +3,52 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
+import { Pencil } from "lucide-react";
 import { Plus } from "lucide-react";
 import { X } from "lucide-react";
 
 import { refreshTag } from "@/app/actions";
 
-export default function NewProjectButton({ text = "Nuevo Proyecto" }) {
+/**
+ * Este componente renderiza un botón que al pulsarlo, crea un modal con un formulario dentro para crear un nuevo
+ * proyecto en la base de datos.
+ * 
+ * El parámetro project definirá como verdadera la variable editing en caso de que no sea nulo,
+ * dependiendo del valor de la variable editing, el componente cambiará ligeramente su renderizado
+ * y funcionamiento. Esto debido a que el componente se adaptó para funcionar para tanto la operación GET como PUT de un proyecto.
+ */
+export default function CreateEditProjectButton({project}) {
   // true cuando este siendo mostrado el popup de nuevo proyecto y false en caso contrario
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
+  const editing = Boolean(project);
+
   return (
     <>
-      <button
-        onClick={() => setIsPopupOpen(true)}
-        className="bg-emerald-400 hover:bg-emerald-500 text-zinc-900 font-medium px-4 py-2 flex items-center gap-2 border border-emerald-500 cursor-pointer"
-      >
-        {text} <Plus className="w-5 h-5" />
-      </button>
+      {editing ? (
+        <Pencil
+          className="w-5 h-5"
+          onClick={() => setIsPopupOpen(true)} />
+      ) : (
+        <button
+          onClick={() => setIsPopupOpen(true)}
+          className="bg-emerald-400 hover:bg-emerald-500 text-zinc-900 font-medium px-4 py-2 flex items-center gap-2 border border-emerald-500 cursor-pointer"
+        >
+          {"Nuevo Proyecto"} <Plus className="w-5 h-5" />
+        </button>
+      )}
 
       <NewProjectPopup
-        formTitle={text}
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
+        editing={editing}
+        project={project}
       />
     </>
   );
 }
 
-function NewProjectPopup({ formTitle, isOpen, onClose }) {
+function NewProjectPopup({ isOpen, onClose, editing, project }) {
   // estos check ayudan a verificar que el componente no se renderice
   // fuera del navegador, intentar acceder a document.body causará error
   if (!isOpen || typeof window === "undefined") return null;
@@ -44,17 +62,21 @@ function NewProjectPopup({ formTitle, isOpen, onClose }) {
         >
           <X className="w-5 h-5" />
         </button>
-        <h3 className="text-xl font-semibold mb-4">{formTitle}</h3>
-        <NewProjectForm onClose={onClose} />
+        <h3 className="text-xl font-semibold mb-4">{editing ? "Editar Proyecto" : "Nuevo Proyecto"}</h3>
+        <ProjectForm
+          onClose={onClose}
+          editing={editing}
+          project={project}
+        />
       </div>
     </div>,
     document.body,
   );
 }
 
-function NewProjectForm({ onClose }) {
-  const [projectName, setProjectName] = useState("");
-  const [projectDescription, setProjectDescription] = useState("");
+function ProjectForm({ onClose, editing, project }) {
+  const [projectName, setProjectName] = useState(project ? project.name : "");
+  const [projectDescription, setProjectDescription] = useState(project ? project.description : "");
 
   // true mientras se este enviando la petición al servidor, el botón de enviar
   // se desactiva mientras la petición este en progreso
@@ -63,19 +85,23 @@ function NewProjectForm({ onClose }) {
     e.preventDefault();
     setIsSubmitting(true);
 
+    console.log("editing", editing);
+    const url = editing
+      ? `http://localhost:8000/projects/${project.id}/`
+      : "http://localhost:8000/projects/";
     const data = {
       name: projectName,
       description: projectDescription,
     };
     console.log(data);
 
-    const response = await fetch("http://localhost:8000/projects/", {
-      method: "POST",
+    const response = await fetch(url, {
+      method: editing ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
     if (!response.ok)
-      throw new Error(`Error al el proyecto: ${response.statusText}`);
+      throw new Error(`Error al ${editing ? "editar" : "crear"} el proyecto: ${response.statusText}`);
 
     const createdProject = await response.json();
     console.log("Proyecto creado exitosamente:", createdProject);

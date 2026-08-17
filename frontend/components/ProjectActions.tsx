@@ -1,6 +1,12 @@
 "use client";
 
-import { Info, Pencil, Trash2 } from "lucide-react";
+import Link from "next/link";
+
+import { Info, Trash2 } from "lucide-react";
+
+import { refreshTag } from "@/app/actions";
+
+import CreateEditProjectButton from "./CreateEditProjectButton";
 
 /**
  * Conjunto de íconos pulsables (botones) para realizar operaciones CRUD sobre un proyecto en específico.
@@ -10,26 +16,33 @@ import { Info, Pencil, Trash2 } from "lucide-react";
  * del cliente para mantener el caché de Next y una sintaxis más limpia.
  * 
  * @example
- * <ProjectActions >
+ * <ProjectActions />
  */
-export default function ProjectActions() {
+export default function ProjectActions({project}) {
+  const deleteProject = async () => {
+    if (!confirm("¿Eliminar proyecto?")) return;
+    const res = await fetch(`http://localhost:8000/projects/${project.id}/`, {
+      method: "DELETE",
+    });
+    if (res.ok) refreshTag("projects");
+  };
+
   return (
     <>
       <button
         className="hover:opacity-80 transition-opacity cursor-pointer"
-        onClick={() => console.log("ver")}
       >
-        <Info className="w-5 h-5" />
+        <Link href={`/projects/${project.id}`}><Info className="w-5 h-5" /></Link>
       </button>
       <button
         className="hover:opacity-80 transition-opacity cursor-pointer"
         onClick={() => console.log("editar")}
       >
-        <Pencil className="w-5 h-5" />
+        <CreateEditProjectButton project={project} />
       </button>
       <button
         className="hover:opacity-80 transition-opacity cursor-pointer"
-        onClick={() => console.log("borrar")}
+        onClick={deleteProject}
       >
         <Trash2 className="w-5 h-5" />
       </button>
