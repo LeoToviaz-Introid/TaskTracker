@@ -1,10 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   // true mientras se este enviando la petición al servidor, el botón de enviar
   // se desactiva mientras la petición este en progreso
@@ -13,26 +15,36 @@ export default function Page() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const data = {
-      user: user,
-      password: password,
-    };
-    console.log(data);
+    try {
+      const data = {
+        username: user,
+        password: password,
+      };
 
-    const response = await fetch("http://localhost:8000/login/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) throw new Error(`Error al iniciar sesión.`);
+      const res = await fetch("http://localhost:8000/login/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        alert("error");
+        setIsSubmitting(false);
+        return;
+      }
+      const tokens = await res.json();
+      console.log(tokens)
+      // guardar los tokens jwt en cookies para que el proxy pueda
+      // verificar el inicio de sesión al navegar entre rutas
+      //document.cookie = `access_token=${tokens.access}; path=/; max-age=3600`;
+      //document.cookie = `refresh_token=${tokens.refresh}; path=/; max-age=86400`;
 
-    const createdTask = await response.json();
-    console.log("Tarea creada exitosamente:", createdTask);
-
-    // limpiar el formulario y cerrar
-    setUser("");
-    setPassword("");
-    setIsSubmitting(false);
+      // redirigir al dashboard
+      //router.push("/");
+      setIsSubmitting(false);
+    } catch {
+      alert("error");
+      setIsSubmitting(false);
+    }
   };
 
   return (
