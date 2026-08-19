@@ -1,3 +1,4 @@
+import { request } from "@/app/api";
 import Header from "@/components/Header";
 import NewTaskButton from "@/components/NewTaskButton";
 import TaskList from "@/components/TaskList";
@@ -48,19 +49,13 @@ export default async function Page({ params }: PageProps) {
 
 async function getProject(id) {
   // obtener detalles de un proyecto
-  const res = await fetch(`http://localhost:8000/projects/${id}/`, {
-    method: "GET",
-    next: { tags: ["project"] },
-  });
-  if (!res.ok) throw new Error("Error al obtener los proyectos");
-  return res.json();
+  const res = await request(`/projects/${id}/`, "GET", undefined, "project");
+  if (res.error) return {};
+  return res;
 }
 async function getProjectTasks(id) {
   // obtener tareas de un proyecto
-  const res = await fetch(`http://localhost:8000/projects/${id}/tasks/`, {
-    method: "GET",
-    next: { tags: ["project-tasks"] },
-  });
-  if (!res.ok) throw new Error("Error al obtener las tareas del proyecto");
-  return res.json();
+  const res = await request(`/projects/${id}/tasks/`, "GET", undefined, "project-tasks");
+  if (res.error) return [];
+  return res;
 }

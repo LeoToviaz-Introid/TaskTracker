@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { request } from "@/app/api";
+
 export default function Page() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
@@ -15,36 +17,26 @@ export default function Page() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    try {
-      const data = {
-        username: user,
-        password: password,
-      };
-
-      const res = await fetch("http://localhost:8000/login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        alert("error");
-        setIsSubmitting(false);
-        return;
-      }
-      const tokens = await res.json();
-      console.log(tokens)
-      // guardar los tokens jwt en cookies para que el proxy pueda
-      // verificar el inicio de sesión al navegar entre rutas
-      //document.cookie = `access_token=${tokens.access}; path=/; max-age=3600`;
-      //document.cookie = `refresh_token=${tokens.refresh}; path=/; max-age=86400`;
-
-      // redirigir al dashboard
-      //router.push("/");
+    const data = {
+      username: user,
+      password: password,
+    };
+    const res = await request("/login/", "POST", data);
+    if (res.error) {
+      alert("error - " + res.msg);
       setIsSubmitting(false);
-    } catch {
-      alert("error");
-      setIsSubmitting(false);
+      return;
     }
+    const tokens = res;
+    console.log(tokens);
+    // guardar los tokens jwt en cookies para que el proxy pueda
+    // verificar el inicio de sesión al navegar entre rutas
+    //document.cookie = `access_token=${tokens.access}; path=/; max-age=3600`;
+    //document.cookie = `refresh_token=${tokens.refresh}; path=/; max-age=86400`;
+
+    // redirigir al dashboard
+    //router.push("/");
+    setIsSubmitting(false);
   };
 
   return (
