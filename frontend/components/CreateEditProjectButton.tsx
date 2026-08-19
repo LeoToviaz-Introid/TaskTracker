@@ -8,6 +8,7 @@ import { Plus } from "lucide-react";
 import { X } from "lucide-react";
 
 import { refreshTag } from "@/app/actions";
+import { request } from "@/app/api"
 
 /**
  * Este componente renderiza un botón que al pulsarlo, crea un modal con un formulario dentro para crear un nuevo
@@ -85,25 +86,21 @@ function ProjectForm({ onClose, editing, project }) {
     e.preventDefault();
     setIsSubmitting(true);
 
-    console.log("editing", editing);
-    const url = editing
-      ? `http://localhost:8000/projects/${project.id}/`
-      : "http://localhost:8000/projects/";
+    const endpoint = editing ? `/projects/${project.id}/` : "/projects/";
+    const method = editing ? "PUT" : "POST";
     const data = {
       name: projectName,
       description: projectDescription,
     };
     console.log(data);
 
-    const response = await fetch(url, {
-      method: editing ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok)
-      throw new Error(`Error al ${editing ? "editar" : "crear"} el proyecto: ${response.statusText}`);
-
-    const createdProject = await response.json();
+    const res = await request(endpoint, method, data, undefined);
+    if (res.error) {
+      alert("error - " + res.msg);
+      setIsSubmitting(false);
+      return;
+    }
+    const createdProject = res;
     console.log("Proyecto creado exitosamente:", createdProject);
 
     // limpiar el formulario y cerrar

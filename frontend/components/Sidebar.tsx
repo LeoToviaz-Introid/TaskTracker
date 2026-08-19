@@ -7,6 +7,8 @@ import { createPortal } from "react-dom";
 
 import { ChevronDown, PanelLeftClose, PanelLeft, Loader2 } from "lucide-react";
 
+import { request } from "@/app/api";
+
 /**
  * Barra lateral desplegable que contiene atajos hacia las rutas: /, /projects y /projects/[id],
  * en este último caso se muestran los últimos 4 proyectos visitados; los más recientes.
@@ -23,18 +25,7 @@ export function Sidebar() {
   // cuando empiece a cargar la app se encontrará vacía, y cuando se renderice el
   // componente cargará datos de la API de proyectos, por el momento datos simulados
   //const [proyectos, setProyectos] = useState<ItemProyecto[]>([]);  // pendiente añadir tipado
-  const [proyectos, setProyectos] = useState([
-    {
-      id: 1,
-      nombre: "Proyecto 1",
-      url: "/projects/1",
-    },
-    {
-      id: 2,
-      nombre: "Proyecto 2",
-      url: "/projects/2",
-    },
-  ]);
+  const [proyectos, setProyectos] = useState([]);
   // true mientras aun no hayan sido cargados en memoria los proyectos disponibles,
   // una vez que cargan los proyectos, la variable cambia a false
   // el contenido renderizado en el Sidebar cambia dependiendo de este estado
@@ -42,14 +33,13 @@ export function Sidebar() {
 
   useEffect(() => {
     async function fetchProjects() {
-      const res = await fetch("http://localhost:8000/projects/", {
-        method: "GET",
-        next: { tags: ["projects"] },
-      });
-      if (!res.ok) throw new Error(`Error al el proyecto: ${res.statusText}`);
-      setProyectos(await res.json());
-
-
+      const res = await request("/request/", "GET", undefined, "projects");
+      if (res.error) {
+        alert("error - " + res.msg);
+        setLoadingProjects(false);
+        return;
+      }
+      setProyectos(res);
       setLoadingProjects(false);
     }
 

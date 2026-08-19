@@ -8,6 +8,7 @@ import { Plus } from "lucide-react";
 import { X } from "lucide-react";
 
 import { refreshTag } from "@/app/actions";
+import { request } from "@/app/api"
 
 export default function NewTaskButton({ text = "Nueva Tarea" }) {
   // true cuando este siendo mostrado el popup de nuevo proyecto y false en caso contrario
@@ -69,20 +70,14 @@ function NewTaskForm({ onClose }) {
 
   useEffect(() => {
     async function fetchProjects() {
-      try {
-        // Asegúrate de usar el endpoint correcto para listar proyectos
-        const response = await fetch("http://localhost:8000/projects/");
-        if (response.ok) {
-          const data = await response.json();
-          setProjects(data);
-        } else {
-          console.error("Error al obtener proyectos");
-        }
-      } catch (error) {
-        console.error("Error de red al consultar proyectos:", error);
-      } finally {
+      const res = await request("/projects/", "GET", undefined, "projects");
+      if (res.error) {
+        alert("error - " + res.msg);
         setLoadingProjects(false);
+        return;
       }
+      setProjects(res);
+      setLoadingProjects(false);
     }
 
     fetchProjects();
@@ -105,16 +100,13 @@ function NewTaskForm({ onClose }) {
     };
     console.log(data);
 
-    const response = await fetch("http://localhost:8000/tasks/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok)
-      throw new Error(`Error al crear la tarea: ${response.statusText}`);
-
-    const createdTask = await response.json();
-    console.log("Tarea creada exitosamente:", createdTask);
+    const res = await request("/tasks/", "POST", data, undefined);
+    if (res.error) {
+      alert("error - " + res.msg);
+      setIsSubmitting(false);
+      return;
+    }
+    console.log("Tarea creada exitosamente:", res);
 
     // limpiar el formulario y cerrar
     setTaskName("");
@@ -125,7 +117,6 @@ function NewTaskForm({ onClose }) {
     setTaskDueDate("");
     onClose();
     refreshTag("project-tasks");
-    //router.refresh();
     setIsSubmitting(false);
   };
 

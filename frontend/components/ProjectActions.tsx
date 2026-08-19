@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Info, Trash2 } from "lucide-react";
 
 import { refreshTag } from "@/app/actions";
+import { request } from "@/app/api"
 
 import CreateEditProjectButton from "./CreateEditProjectButton";
 
@@ -21,10 +22,12 @@ import CreateEditProjectButton from "./CreateEditProjectButton";
 export default function ProjectActions({project}) {
   const deleteProject = async () => {
     if (!confirm("¿Eliminar proyecto?")) return;
-    const res = await fetch(`http://localhost:8000/projects/${project.id}/`, {
-      method: "DELETE",
-    });
-    if (res.ok) refreshTag("projects");
+    const res = await request(`/projects/${project.id}/`, "DELETE", undefined, undefined);
+    if (res.error) {
+      alert("error - " + res.msg);
+      return;
+    }
+    refreshTag("projects");
   };
 
   return (
