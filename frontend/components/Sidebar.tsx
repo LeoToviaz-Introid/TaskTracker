@@ -33,7 +33,7 @@ export function Sidebar() {
 
   useEffect(() => {
     async function fetchProjects() {
-      const res = await request("/request/", "GET", undefined, "projects");
+      const res = await request("/projects/", "GET", undefined, "projects");
       if (res.error) {
         alert("error - " + res.msg);
         setLoadingProjects(false);
