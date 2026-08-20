@@ -23,12 +23,12 @@ const tareasBD = [
   { id: 21, proyecto: "Proyecto Extra", accion: "Tarea ignorada" },
 ];
 
-export default function TareasUrgentesWidget() {
+export default function HighPriorityTasksList() {
   // Se limitan las tareas a 20 en el cliente, el endpoint API real realizará el filtrado en el servidor
   const tareas = tareasBD.slice(0, 20);
 
   return (
-    <div className="w-full max-w-md bg-zinc-800/80 border border-white hover:border-emerald-300/80 transition-all delay-75 ease-in-out p-5">
+    <div className="w-full bg-zinc-800/80 border border-white hover:border-emerald-300/80 transition-colors duration-150 p-5">
       <h3 className="text-lg font-medium text-white mb-4">Tareas Urgentes</h3>
       <div className="max-h-48 overflow-y-auto pr-2 space-y-3 scrollbar-thin scrollbar-thumb-slate-200">
         {tareas.map((item) => (
