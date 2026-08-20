@@ -7,11 +7,12 @@ export default function TaskList({ title, tasks }) {
         {tasks.map((el) => (
           <div
             key={el.id}
-            className="flex items-center justify-between text-sm"
+            data-task-id={el.id}
+            className={`draggable-task touch-none select-none flex items-center justify-between text-sm cursor-grab active:cursor-grabbing`}
           >
             <span
               className={`
-                font-medium p-1 border border-white/20 hover:bg-blue-100/20 cursor-grabbing
+                 font-medium p-1 border border-white/20 hover:bg-blue-100/20 w-full
                 ${
                   el.priority === "high"
                     ? "text-red-100"
