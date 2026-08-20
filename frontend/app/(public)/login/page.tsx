@@ -28,14 +28,13 @@ export default function Page() {
       return;
     }
     const tokens = res;
-    console.log(tokens);
-    // guardar los tokens jwt en cookies para que el proxy pueda
-    // verificar el inicio de sesión al navegar entre rutas
-    //document.cookie = `access_token=${tokens.access}; path=/; max-age=3600`;
-    //document.cookie = `refresh_token=${tokens.refresh}; path=/; max-age=86400`;
+    // guardar el access token jwt en una cookie para que el middleware
+    // pueda verificar el inicio de sesión al navegar entre rutas
+    // el refresh token no se utiliza en esta aplicación
+    document.cookie = `access_token=${tokens.access}; path=/; max-age=3600`;
 
     // redirigir al dashboard
-    //router.push("/");
+    router.push("/");
     setIsSubmitting(false);
   };
 
