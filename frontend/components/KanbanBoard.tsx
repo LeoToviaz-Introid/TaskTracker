@@ -32,6 +32,15 @@ export default function KanbanBoard({ projectTasks }) {
       inertia: true,
       autoScroll: true,
       listeners: {
+        start(event) {
+          const rect = event.target.getBoundingClientRect();
+          // Guardar dimensión original y fijar posición global para evitar el corte por overflow
+          event.target.style.width = `${rect.width}px`;
+          event.target.style.position = 'fixed';
+          event.target.style.left = `${rect.left}px`;
+          event.target.style.top = `${rect.top}px`;
+          event.target.classList.add('z-50', 'opacity-75');
+        },
         move(event) {
           const target = event.target;
           const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
@@ -40,10 +49,14 @@ export default function KanbanBoard({ projectTasks }) {
           target.style.transform = `translate(${x}px, ${y}px)`;
           target.setAttribute('data-x', x.toString());
           target.setAttribute('data-y', y.toString());
-          target.classList.add('z-50', 'opacity-75');
         },
         end(event) {
           const target = event.target;
+          // quitar estilos temporales
+          target.style.position = '';
+          target.style.left = '';
+          target.style.top = '';
+          target.style.width = '';
           target.style.transform = 'none';
           target.removeAttribute('data-x');
           target.removeAttribute('data-y');
