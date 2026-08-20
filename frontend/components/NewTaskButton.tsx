@@ -18,7 +18,7 @@ export default function NewTaskButton({ text = "Nueva Tarea" }) {
     <>
       <button
         onClick={() => setIsPopupOpen(true)}
-        className="bg-emerald-400 hover:bg-emerald-500 text-zinc-900 font-medium px-4 py-2 flex items-center gap-2 border border-emerald-500 cursor-pointer"
+        className="bg-pink-500 hover:bg-pink-600 text-white font-medium px-4 py-2 flex items-center gap-2 border border-pink-600 cursor-pointer"
       >
         {text} <Plus className="w-5 h-5" />
       </button>
@@ -39,10 +39,10 @@ function NewTaskPopup({ formTitle, isOpen, onClose }) {
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-md bg-zinc-800 p-6 text-white shadow-xl border border-zinc-700 relative">
+      <div className="w-full max-w-md bg-gray-900 p-6 text-white shadow-xl border border-gray-600 relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:text-zinc-200 cursor-pointer"
+          className="absolute top-4 right-4 text-white hover:text-pink-300 cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -131,7 +131,7 @@ function NewTaskForm({ onClose }) {
           value={taskName}
           onChange={(e) => setTaskName(e.target.value)}
           placeholder="Escribe el nombre de la tarea"
-          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500"
+          className="w-full px-3 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-pink-500"
         />
         {/* -------- Description -------- */}
         <label className="block text-sm font-medium mt-1 mb-1">
@@ -143,7 +143,7 @@ function NewTaskForm({ onClose }) {
           value={taskDescription}
           onChange={(e) => setTaskDescription(e.target.value)}
           placeholder="Escribe la descripción"
-          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500"
+          className="w-full px-3 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-pink-500"
         />
         {/* -------- Proyecto -------- */}
         <label className="block text-sm font-medium mt-3 mb-1">Proyecto</label>
@@ -152,7 +152,7 @@ function NewTaskForm({ onClose }) {
           value={taskProjectId}
           onChange={(e) => setTaskProjectId(e.target.value)}
           disabled={loadingProjects}
-          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500 cursor-pointer disabled:opacity-50"
+          className="w-full px-3 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-pink-500 cursor-pointer disabled:opacity-50"
         >
           <option value="" disabled>
             {loadingProjects
@@ -171,7 +171,7 @@ function NewTaskForm({ onClose }) {
           required
           value={taskEstado}
           onChange={(e) => setTaskEstado(e.target.value)}
-          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500 cursor-pointer"
+          className="w-full px-3 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-pink-500 cursor-pointer"
         >
           <option value="" disabled>
             Selecciona un estado
@@ -186,7 +186,7 @@ function NewTaskForm({ onClose }) {
           required
           value={taskPriority}
           onChange={(e) => setTaskPriority(e.target.value)}
-          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500 cursor-pointer"
+          className="w-full px-3 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-pink-500 cursor-pointer"
         >
           <option value="" disabled>
             Selecciona la prioridad
@@ -204,7 +204,7 @@ function NewTaskForm({ onClose }) {
           required
           value={taskDueDate}
           onChange={(e) => setTaskDueDate(e.target.value)}
-          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500 [color-scheme:dark]"
+          className="w-full px-3 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-pink-500 [color-scheme:dark]"
         />
       </div>
 
@@ -212,14 +212,14 @@ function NewTaskForm({ onClose }) {
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-sm font-medium cursor-pointer"
+          className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-sm font-medium cursor-pointer"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-zinc-900 text-sm font-semibold cursor-pointer"
+          className="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white text-sm font-semibold cursor-pointer"
         >
           {isSubmitting ? "Guardando..." : "Enviar"}
         </button>

@@ -22,7 +22,7 @@ export default function RecentProjects() {
   const proyectos = proyectosDB.slice(0, 10);
 
   return (
-    <div className="w-full bg-zinc-800/80 border border-white hover:border-emerald-300/80 transition-colors duration-150 p-5 ">
+    <div className="w-full bg-gray-900 border border-gray-600 hover:border-green-400 transition-colors duration-150 p-5 ">
       <h3 className="text-lg font-medium text-white mb-4">Proyectos Recientes</h3>
       <div className="max-h-48 overflow-y-auto pr-2 space-y-4 scrollbar-thin scrollbar-thumb-slate-200">
         {proyectos.map((item) => (
@@ -31,7 +31,7 @@ export default function RecentProjects() {
             className="flex items-baseline justify-between text-sm"
           >
             <span className="font-medium text-white whitespace-nowrap">{item.nombre}</span>
-            <div className="flex-1 mx-3 border-b-2 border-dotted border-emerald-500" />
+            <div className="flex-1 mx-3 border-b-2 border-dotted border-pink-500" />
             <span className="text-white font-normal whitespace-nowrap">{item.completadas}/{item.total.toLocaleString()} tareas</span>
           </div>
         ))}

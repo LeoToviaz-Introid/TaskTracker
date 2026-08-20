@@ -1,6 +1,6 @@
 export default function Header({title, text, button, description}) {
   return (
-    <div className="p-4 bg-red-100 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+    <div className="p-4 bg-gray-900 text-white border-b-2 border-green-500 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
       <div className="font-bold text-lg">
         {title}
       </div>

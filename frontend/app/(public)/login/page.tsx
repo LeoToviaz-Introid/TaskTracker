@@ -41,28 +41,28 @@ export default function Page() {
   return (
     <>
       <div className="mx-2 md:mx-10">
-        <h1>TaskTracker</h1>
+        <h1 className="text-white">TaskTracker</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             {/* -------- Username -------- */}
-            <label className="block text-sm font-medium mb-1">Usuario</label>
+            <label className="block text-sm font-medium mb-1 text-white">Usuario</label>
             <input
               type="text"
               required
               value={user}
               onChange={(e) => setUser(e.target.value)}
               placeholder="Usuario"
-              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500"
+              className="w-full px-3 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-pink-500"
             />
             {/* -------- Password -------- */}
-            <label className="block text-sm font-medium mb-1">Contraseña</label>
+            <label className="block text-sm font-medium mb-1 text-white">Contraseña</label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Contraseña"
-              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500"
+              className="w-full px-3 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-pink-500"
             />
           </div>
 
@@ -70,7 +70,7 @@ export default function Page() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-zinc-900 text-sm font-semibold cursor-pointer"
+              className="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white text-sm font-semibold cursor-pointer"
             >
               {isSubmitting ? "Buscando..." : "Iniciar Sesión"}
             </button>
