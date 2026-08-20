@@ -1,16 +1,18 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function request(endpoint, method, body, cacheTag) {
+export async function serverRequest(endpoint, method, body, cacheTag) {
   try {
+    const token = (await cookies()).get("access_token")?.value;
     const res = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: method,
       headers: {
         ...(method === "POST" || method === "PUT" || method === "PATCH"
           ? { "Content-Type": "application/json" }
           : {}),
-        ...(_getAccessToken()
-          ? { Authorization: `Bearer ${_getAccessToken()}` }
-          : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
       next: { tags: cacheTag ? cacheTag : undefined },
@@ -27,32 +29,24 @@ export async function request(endpoint, method, body, cacheTag) {
     // petición exitosa
     if (res.ok) return await res.json();
     // ====================================================
-    // token inválido o expirado al intentar hacer una peticion a una vista
-    // protegida (todas excepto login), se limpia la cookie y se regresa al login
+    // token inválido o expirado: redirigir
     if (res.status === 401 && endpoint !== "/login/") {
-      document.cookie = "access_token=; path=/; max-age=0";
-      window.location.href = new URL("/login", window.location.origin).href;
-      return {
-        error: true,
-        msg: "Sesión expirada, vuelve a iniciar sesión",
-      };
+      redirect("/login");
     }
+    // ====================================================
     // errores del servidor (nivel aplicación)
     return {
       error: true,
       msg: `${res.status}: ${res.statusText}`,
     };
   } catch (e) {
+    // redirect() lanza una excepcion de next js, se relanza para no atraparla como error de red
+    if (e?.digest?.startsWith("NEXT_REDIRECT")) throw e;
+    // ====================================================
     // errores de red
     return {
       error: true,
-      msg: e,
+      msg: e.message || e,
     };
   }
-}
-// obtiene el valor de la cookie "access_token"
-function _getAccessToken() {
-  if (typeof document === "undefined") return null;
-  const match = document.cookie.match(/(?:^|;\s*)access_token=([^;]+)/);
-  return match ? decodeURIComponent(match[1]) : null;
 }
