@@ -33,7 +33,7 @@ export default function CreateEditProjectButton({project}) {
       ) : (
         <button
           onClick={() => setIsPopupOpen(true)}
-          className="bg-emerald-400 hover:bg-emerald-500 text-zinc-900 font-medium px-4 py-2 flex items-center gap-2 border border-emerald-500 cursor-pointer"
+          className="bg-pink-500 hover:bg-pink-600 text-white font-medium px-4 py-2 flex items-center gap-2 border border-pink-600 cursor-pointer"
         >
           {"Nuevo Proyecto"} <Plus className="w-5 h-5" />
         </button>
@@ -56,10 +56,10 @@ function NewProjectPopup({ isOpen, onClose, editing, project }) {
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-md bg-zinc-800 p-6 text-white shadow-xl border border-zinc-700 relative">
+      <div className="w-full max-w-md bg-gray-900 p-6 text-white shadow-xl border border-gray-600 relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:text-zinc-200 cursor-pointer"
+          className="absolute top-4 right-4 text-white hover:text-pink-300 cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -122,7 +122,7 @@ function ProjectForm({ onClose, editing, project }) {
           value={projectName}
           onChange={(e) => setProjectName(e.target.value)}
           placeholder="Escribe el nombre del proyecto"
-          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500"
+          className="w-full px-3 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-pink-500"
         />
         {/* -------- Description -------- */}
         <label className="block text-sm font-medium mt-1 mb-1">
@@ -134,7 +134,7 @@ function ProjectForm({ onClose, editing, project }) {
           value={projectDescription}
           onChange={(e) => setProjectDescription(e.target.value)}
           placeholder="Escribe la descripción"
-          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500"
+          className="w-full px-3 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-pink-500"
         />
       </div>
 
@@ -142,14 +142,14 @@ function ProjectForm({ onClose, editing, project }) {
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-sm font-medium cursor-pointer"
+          className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-sm font-medium cursor-pointer"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-zinc-900 text-sm font-semibold cursor-pointer"
+          className="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white text-sm font-semibold cursor-pointer"
         >
           {isSubmitting ? "Guardando..." : "Enviar"}
         </button>

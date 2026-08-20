@@ -89,14 +89,14 @@ export default function KanbanBoard({ projectTasks }) {
   const completedTasks = tasks.filter((el) => el.estado === 'completed');
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-blue-50 p-4 min-h-[500px]">
-      <div className="task-dropzone bg-rose-400 p-2 rounded" data-status="pending">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-800 p-4 min-h-[500px]">
+      <div className="task-dropzone bg-pink-950 p-2" data-status="pending">
         <TaskList title="Por hacer" tasks={pendingTasks} />
       </div>
-      <div className="task-dropzone bg-indigo-500 p-2 rounded" data-status="in_progress">
+      <div className="task-dropzone bg-green-950 p-2" data-status="in_progress">
         <TaskList title="En progreso" tasks={inProgressTasks} />
       </div>
-      <div className="task-dropzone bg-gray-700 text-white p-2 rounded" data-status="completed">
+      <div className="task-dropzone bg-gray-950 text-white p-2" data-status="completed">
         <TaskList title="Completadas" tasks={completedTasks} />
       </div>
     </div>

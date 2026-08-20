@@ -33,18 +33,18 @@ export default function ProjectActions({project}) {
   return (
     <>
       <button
-        className="hover:opacity-80 transition-opacity cursor-pointer"
+        className="text-gray-300 hover:text-pink-400 hover:opacity-80 transition-opacity cursor-pointer"
       >
         <Link href={`/projects/${project.id}`}><Info className="w-5 h-5" /></Link>
       </button>
       <button
-        className="hover:opacity-80 transition-opacity cursor-pointer"
+        className="text-gray-300 hover:text-pink-400 hover:opacity-80 transition-opacity cursor-pointer"
         onClick={() => console.log("editar")}
       >
         <CreateEditProjectButton project={project} />
       </button>
       <button
-        className="hover:opacity-80 transition-opacity cursor-pointer"
+        className="text-gray-300 hover:text-pink-400 hover:opacity-80 transition-opacity cursor-pointer"
         onClick={deleteProject}
       >
         <Trash2 className="w-5 h-5" />

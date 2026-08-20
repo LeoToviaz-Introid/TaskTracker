@@ -50,12 +50,12 @@ export function Sidebar() {
   return (
     <aside
       className={`
-        fixed top-0 left-0 flex flex-col shrink-0 h-screen p-0 m-0 bg-emerald-300 text-white transition-all duration-300 ease-in-out divide-y divide-white/40 max-w-26.5 overflow-hidden
+        fixed top-0 left-0 flex flex-col shrink-0 h-screen p-0 m-0 bg-black text-white transition-all duration-300 ease-in-out divide-y divide-gray-700 max-w-26.5 overflow-hidden
       `}
     >
       <button
         className={`
-        p-2 overflow-scroll bg-emerald-400 hover:bg-emerald-500 focus:bg-emerald-600 cursor-pointer
+        p-2 overflow-scroll bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 cursor-pointer
         
         ${isCollapsed ? "hidden" : "block"}
       `}
@@ -69,13 +69,13 @@ export function Sidebar() {
         ${isCollapsed ? "hidden" : "block"}
         `}
       >
-        <button className="p-2 bg-emerald-400 hover:bg-emerald-500 focus:bg-emerald-600 cursor-pointer">
+        <button className="p-2 bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 cursor-pointer">
           <Link href="/projects">Proyectos</Link>
         </button>
         {/** -------- flecha al lado de Proyectos -------- */}
         <div
           className={`
-            flex flex-col justify-center shrink-0 transition-transform duration-200 bg-emerald-400 hover:bg-emerald-500
+            flex flex-col justify-center shrink-0 transition-transform duration-200 bg-pink-500 hover:bg-pink-600
             relative
             ${isCollapsed ? "-rotate-90" : ""}
           `}
@@ -96,12 +96,12 @@ export function Sidebar() {
           document.getElementById("recent-projects-container") &&
           createPortal(
             <div
-              className="bg-emerald-500 flex flex-col divide-y divide-white/20"
+              className="bg-gray-900 flex flex-col divide-y divide-gray-700"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
               {loadingProjects ? (
-                <div className="flex items-center justify-center pt-2 pb-2 text-sm text-emerald-100">
+                <div className="flex items-center justify-center pt-2 pb-2 text-sm text-pink-200">
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
                   Cargando...
                 </div>
@@ -110,13 +110,13 @@ export function Sidebar() {
                   <Link
                     key={item.id}
                     href={`http://localhost:3000/projects/${item.id}` }
-                    className="block px-4 py-2 text-sm text-white hover:bg-emerald-700 transition-colors"
+                    className="block px-4 py-2 text-sm text-white hover:bg-pink-700 transition-colors"
                   >
                     {item.name}
                   </Link>
                 ))
               ) : (
-                <div className="px-4 py-2 text-sm text-emerald-200">
+                <div className="px-4 py-2 text-sm text-gray-400">
                   Sin proyectos
                 </div>
               )}
@@ -127,7 +127,7 @@ export function Sidebar() {
       </div>
       <div id="recent-projects-container" className="flex-1"></div>
       <button
-        className="p-2 bg-emerald-400 hover:bg-emerald-500 focus:bg-emerald-600 cursor-pointer"
+        className="p-2 bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 cursor-pointer"
         onClick={() => setIsCollapsed(!isCollapsed)}
       >
         {isCollapsed ? (

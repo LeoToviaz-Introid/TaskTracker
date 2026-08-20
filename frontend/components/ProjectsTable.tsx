@@ -9,7 +9,7 @@ export default async function ProjectsTable() {
     <div className="w-full">
       {/*Como las tablas no se ven bien en móviles, esta se convierte en un conjunto de tarjetas*/}
       <table className="w-full text-left border-collapse block ml-4 md:table">
-        <thead className="hidden border border-white bg-zinc-800/80 text-white md:table-header-group">
+        <thead className="hidden border border-white bg-black text-white md:table-header-group">
           <tr className="block md:table-row">
             <th className="p-3 block md:table-cell">Proyecto</th>
             <th className="p-3 block md:table-cell md:text-right">Acciones</th>
@@ -19,7 +19,7 @@ export default async function ProjectsTable() {
           {proyectos.map((el) => (
             <tr
               key={el.id}
-              className="bg-emerald-400 border mb-4 p-4 block md:table-row md:mb-0 md:p-0 md:border-b"
+              className="bg-gray-800 border-gray-700 border mb-4 p-4 block md:table-row md:mb-0 md:p-0 md:border-b"
             >
               <td className="p-2 flex justify-between border-b md:border-b-0 md:p-3 md:table-cell md:justify-start">
                 <span className="font-bold md:hidden">Proyecto:</span>{" "}

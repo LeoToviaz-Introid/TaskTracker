@@ -16,7 +16,7 @@ export default async function Page({ params }: PageProps) {
         text={`${completedTasks.length}/${projectTasks.length}`}
         button={<NewTaskButton />}
         description={
-          <p className="text-sm text-zinc-700">{project.description}</p>
+          <p className="text-sm text-gray-300">{project.description}</p>
         }
       />
       {/* re-renderizar automaticamente el componente cuando cambie projectTasks gracias a key */}
