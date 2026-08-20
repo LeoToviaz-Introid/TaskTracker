@@ -1,4 +1,4 @@
-import { request } from "@/app/api";
+import { serverRequest } from "@/app/server-api";
 
 import ProjectActions from "./ProjectActions";
 
@@ -41,7 +41,7 @@ export default async function ProjectsTable() {
 
 async function getProjects() {
   // obtener proyectos
-  const res = await request("/projects/", "GET", undefined, "projects");
+  const res = await serverRequest("/projects/", "GET", undefined, "projects");
   if (res.error) return [];
   return res;
 }
