@@ -1,17 +1,17 @@
 import Header from "@/components/Header";
-import ProyectosRecientes from "@/components/ProyectosRecientes";
-import TareasUrgentes from "@/components/TareasUrgentes";
+import HighPriorityTasksList from "@/components/HighPriorityTasksList";
+import RecentProjects from "@/components/RecentProjects";
 
 export default function Page() {
   return (
     <>
       <Header title={<h1 className="text-2xl">Inicio</h1>}/>
       {/** --------===== fila 1 =====-------- */}
-      {/** --------===== fila 2 =====-------- */}
-      <div className="flex bg-zinc-700 grow-4">
-        <div className="flex flex-1 grow">
-          {/** -------- total de proyectos -------- */}
-          <div className="flex flex-col flex-1 self-start bg-zinc-800/80 border border-emerald-500 m-10 p-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 bg-zinc-700 grow-4 gap-0">
+        {/** Primer elemento (1/3 de ancho en escritorio / 100% en pantallas menores) */}
+        <div className="lg:col-span-1">
+          {/** Total de proyectos */}
+          <div className="bg-zinc-800/80 border border-emerald-500 lg:m-10 p-5">
             <h3 className="text-3xl font-bold text-white mt-1">5</h3>
             <div>
               <p className="text-sm font-medium text-zinc-200">
@@ -19,23 +19,20 @@ export default function Page() {
               </p>
             </div>
           </div>
-          {/** div relleno */}
-          <div className="flex-1"></div>
-          {/** div relleno */}
-          {/** -------- total de proyectos -------- */}
         </div>
-        <div className="flex flex-1 flex-col">
-          {/** -------- tareas en total/pendientes/completadas -------- */}
-          <div className="flex items-stretch flex-1 grow-4 mr-10">
+        {/** Segundo elemento (2/3 de ancho en escritorio / 100% en pantallas menores) */}
+        <div className="lg:col-span-2">
+          {/** Tareas: 3 columnas en desktop/tablet, 1 columna (apiladas) en móvil */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 lg:mr-10">    
             {/* Tareas en Total */}
-            <div className="flex flex-1 flex-col bg-zinc-800/80 border border-emerald-500 mt-10 mb-20 p-5">
+            <div className="bg-zinc-800/80 border border-emerald-500 lg:mt-10 lg:mb-20 p-5">
               <h3 className="text-3xl font-bold text-zinc-100 mt-1">5</h3>
               <p className="text-sm font-medium text-zinc-200">
                 Tareas en Total
               </p>
             </div>
             {/* Tareas pendientes */}
-            <div className="flex flex-1 flex-col bg-zinc-800/80 border border-emerald-500 mt-10 mb-20 p-5">
+            <div className="bg-zinc-800/80 border border-emerald-500 lg:mt-10 lg:mb-20 p-5">
               <div>
                 <h3 className="text-3xl font-bold text-zinc-100 mt-1">5</h3>
                 <p className="text-sm font-medium text-zinc-200">
@@ -44,7 +41,7 @@ export default function Page() {
               </div>
             </div>
             {/* Tareas completadas */}
-            <div className="flex flex-1 flex-col bg-zinc-800/80 border border-emerald-500 mt-10 mb-20 p-5">
+            <div className="bg-zinc-800/80 border border-emerald-500 lg:mt-10 lg:mb-20 p-5">
               <div>
                 <h3 className="text-3xl font-bold text-zinc-100 mt-1">5</h3>
                 <p className="text-sm font-medium text-zinc-200">
@@ -53,23 +50,13 @@ export default function Page() {
               </div>
             </div>
           </div>
-          {/** div relleno */}
-          <div className="flex-1"></div>
-          {/** div relleno */}
-          {/** -------- tareas en total/pendientes/completadas -------- */}
         </div>
       </div>
       {/** --------===== fila 2 =====-------- */}
-      {/** --------===== fila 3 =====-------- */}
-      <div className="flex bg-zinc-700 grow-5">
-        <div className="grow-5">
-          <ProyectosRecientes />
-        </div>
-        <div className="grow-5">
-          <TareasUrgentes />
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 items-start bg-zinc-700 grow-5 lg:gap-10 lg:px-10 pb-10">
+        <RecentProjects />
+        <HighPriorityTasksList />
       </div>
-      {/** --------===== fila 3 =====-------- */}
     </>
   );
 }

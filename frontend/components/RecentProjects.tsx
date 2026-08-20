@@ -11,25 +11,27 @@ const proyectosDB = [
   { id: 10, nombre: "Base de Datos Analytics", completadas: 1, total: 4 },
   // Este elemento 11 no se muestra en el componente debido al límite de 10
   { id: 11, nombre: "Proyecto Ignorado 11", completadas: 0, total: 10 },
+  { id: 12, nombre: "Proyecto Ignorado 12", completadas: 0, total: 10 },
+  { id: 13, nombre: "Proyecto Ignorado 13", completadas: 0, total: 10 },
+  { id: 14, nombre: "Proyecto Ignorado 14", completadas: 0, total: 10 },
+  { id: 15, nombre: "Proyecto Ignorado 15", completadas: 0, total: 10 },
 ];
 
-export default function ProyectosRecientes() {
+export default function RecentProjects() {
   // Se limitan los proyectos a 10 en el ciente, el endpoint API real realizará el filtrado en el servidor una vez sea implementado
   const proyectos = proyectosDB.slice(0, 10);
 
   return (
-    <div className="w-full max-w-md bg-zinc-800/80 border border-white hover:border-emerald-300/80 transition-all delay-75 ease-in-out p-5 ml-10">
-      <h3 className="text-lg font-medium text-white mb-4">
-        Proyectos Recientes
-      </h3>
-      <div className="max-h-27.5 overflow-y-auto pr-2 space-y-4 scrollbar-thin scrollbar-thumb-slate-200">
+    <div className="w-full bg-zinc-800/80 border border-white hover:border-emerald-300/80 transition-colors duration-150 p-5 ">
+      <h3 className="text-lg font-medium text-white mb-4">Proyectos Recientes</h3>
+      <div className="max-h-48 overflow-y-auto pr-2 space-y-4 scrollbar-thin scrollbar-thumb-slate-200">
         {proyectos.map((item) => (
           <div
             key={item.id}
-            className="flex items-center justify-between text-sm"
+            className="flex items-baseline justify-between text-sm"
           >
             <span className="font-medium text-white whitespace-nowrap">{item.nombre}</span>
-            <div className="flex-1 mx-3 border-b-2 border-dotted border-emerald-500 self-end mb-1" />
+            <div className="flex-1 mx-3 border-b-2 border-dotted border-emerald-500" />
             <span className="text-white font-normal whitespace-nowrap">{item.completadas}/{item.total.toLocaleString()} tareas</span>
           </div>
         ))}
