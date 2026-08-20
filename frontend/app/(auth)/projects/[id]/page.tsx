@@ -1,4 +1,4 @@
-import { request } from "@/app/api";
+import { serverRequest } from "@/app/server-api";
 import Header from "@/components/Header";
 import NewTaskButton from "@/components/NewTaskButton";
 import TaskList from "@/components/TaskList";
@@ -49,13 +49,13 @@ export default async function Page({ params }: PageProps) {
 
 async function getProject(id) {
   // obtener detalles de un proyecto
-  const res = await request(`/projects/${id}/`, "GET", undefined, "project");
+  const res = await serverRequest(`/projects/${id}/`, "GET", undefined, "project");
   if (res.error) return {};
   return res;
 }
 async function getProjectTasks(id) {
   // obtener tareas de un proyecto
-  const res = await request(`/projects/${id}/tasks/`, "GET", undefined, "project-tasks");
+  const res = await serverRequest(`/projects/${id}/tasks/`, "GET", undefined, "project-tasks");
   if (res.error) return [];
   return res;
 }
