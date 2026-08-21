@@ -1,3 +1,5 @@
+from django.db.models import Count
+from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -28,3 +30,22 @@ class ProjectTasksView(APIView):
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+
+class DashboardStatsView(APIView):
+    """
+    Vista para obtener las estadísticas del dashboard.
+
+    URL: stats/
+    """
+    def get(self, request):
+        task_stats = Task.objects.aggregate(
+            total=Count("id"),
+            pending=Count("id", filter=Q(estado=Task.Estado.PENDING)),
+            completed=Count("id", filter=Q(estado=Task.Estado.COMPLETED)),
+        )
+        return Response({
+            "total_projects": Project.objects.count(),
+            "total_tasks": task_stats["total"],
+            "pending_tasks": task_stats["pending"],
+            "completed_tasks": task_stats["completed"],
+        })

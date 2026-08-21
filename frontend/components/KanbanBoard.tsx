@@ -24,6 +24,7 @@ export default function KanbanBoard({ projectTasks }) {
       return;
     }
     refreshTag("project-tasks");
+    refreshTag("stats");
   };
   // efecto de configuracion de interact js
   useEffect(() => {

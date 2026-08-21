@@ -117,6 +117,7 @@ function NewTaskForm({ projectId, onClose }) {
     setTaskDueDate("");
     onClose();
     refreshTag("project-tasks");
+    refreshTag("stats");
     setIsSubmitting(false);
   };
 
