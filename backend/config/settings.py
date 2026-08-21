@@ -72,8 +72,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    # cada vista de negocio (exceptuando /login/) requerira un token valido
-    # para poder acceder a ella
+    # cada vista del backend requerira un token válido en la cabecera Authorization para poder realizarle una petición a ella
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     )
