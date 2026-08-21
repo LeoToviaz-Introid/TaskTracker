@@ -1,7 +1,7 @@
 import { serverRequest } from "@/app/server-api";
 import Header from "@/components/Header";
 import HighPriorityTasksList from "@/components/HighPriorityTasksList";
-import RecentProjects from "@/components/RecentProjects";
+import ProjectsList from "@/components/ProjectsList";
 
 export default async function Page() {
   const stats = await getStats();
@@ -57,8 +57,8 @@ export default async function Page() {
       </div>
       {/** --------===== fila 2 =====-------- */}
       <div className="grid grid-cols-1 lg:grid-cols-2 items-start bg-gray-900 grow-5 lg:gap-10 lg:px-10 pb-10">
-        <RecentProjects />
-        <HighPriorityTasksList />
+        <ProjectsList projects={stats.projects} />
+        <HighPriorityTasksList tasks={stats.urgent_tasks} />
       </div>
     </>
   );
@@ -67,6 +67,13 @@ export default async function Page() {
 async function getStats() {
   const res = await serverRequest("/stats/", "GET", undefined, "stats");
   return res.error
-    ? { total_projects: "-", total_tasks: "-", pending_tasks: "-", completed_tasks: "-" }
+    ? {
+        total_projects: "-",
+        total_tasks: "-",
+        pending_tasks: "-",
+        completed_tasks: "-",
+        projects: [],
+        urgent_tasks: [],
+      }
     : res;
 }
