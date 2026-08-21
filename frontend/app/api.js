@@ -1,6 +1,6 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function request(endpoint, method, body, cacheTag) {
+export async function request(endpoint, method, body) {
   try {
     const res = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: method,
@@ -13,7 +13,6 @@ export async function request(endpoint, method, body, cacheTag) {
           : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
-      next: { tags: cacheTag ? cacheTag : undefined },
     });
     // ====================================================
     // manejo de codigo 204 luego de un delete exitoso
