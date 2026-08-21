@@ -108,6 +108,7 @@ function ProjectForm({ onClose, editing, project }) {
     setProjectDescription("");
     onClose();
     refreshTag("projects");
+    refreshTag("stats");
     setIsSubmitting(false);
   };
 

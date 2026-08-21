@@ -15,7 +15,7 @@ export async function serverRequest(endpoint, method, body, cacheTag) {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
-      next: { tags: cacheTag ? cacheTag : undefined },
+      next: { tags: cacheTag ? [cacheTag] : undefined },
     });
     // ====================================================
     // manejo de codigo 204 luego de un delete exitoso

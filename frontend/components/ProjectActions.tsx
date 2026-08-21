@@ -28,6 +28,7 @@ export default function ProjectActions({project}) {
       return;
     }
     refreshTag("projects");
+    refreshTag("stats");
   };
 
   return (

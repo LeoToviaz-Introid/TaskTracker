@@ -1,52 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
-import { ChevronDown, PanelLeftClose, PanelLeft, Loader2 } from "lucide-react";
-
-import { request } from "@/app/api";
+import { ChevronDown, PanelLeftClose, PanelLeft } from "lucide-react";
 
 /**
  * Barra lateral desplegable que contiene atajos hacia las rutas: /, /projects y /projects/[id],
- * en este último caso se muestran los últimos 4 proyectos visitados; los más recientes.
+ * en este último caso se muestran los primeros 6 proyectos.
+ * Los proyectos se reciben como prop desde el layout (auth) para respetar
+ * la invalidación por tags (refreshTag("projects")).
  *
  * @example
- * <Sidebar />
+ * <Sidebar projects={projects} />
  */
-export function Sidebar() {
+export function Sidebar({ projects }) {
   // true cuando esta desplegado el sidebar y false en caso contrario
   const [isCollapsed, setIsCollapsed] = useState(false);
   // true cuando el mouse esta encima de la flecha al lado de "Proyectos"
   // false cuando no
   const [isHovered, setIsHovered] = useState(false);
-  // cuando empiece a cargar la app se encontrará vacía, y cuando se renderice el
-  // componente cargará datos de la API de proyectos, por el momento datos simulados
-  //const [proyectos, setProyectos] = useState<ItemProyecto[]>([]);  // pendiente añadir tipado
-  const [proyectos, setProyectos] = useState([]);
-  // true mientras aun no hayan sido cargados en memoria los proyectos disponibles,
-  // una vez que cargan los proyectos, la variable cambia a false
-  // el contenido renderizado en el Sidebar cambia dependiendo de este estado
-  const [loadingProjects, setLoadingProjects] = useState(true);
-
-  useEffect(() => {
-    async function fetchProjects() {
-      const res = await request("/projects/", "GET", undefined, "projects");
-      if (res.error) {
-        alert("error - " + res.msg);
-        setLoadingProjects(false);
-        return;
-      }
-      setProyectos(res);
-      setLoadingProjects(false);
-    }
-
-    fetchProjects();
-  }, []);
   // limita la cantidad de objetos a renderizar
-  proyectos.slice(0, 5);
+  const visibleProjects = projects.slice(0, 6);
   return (
     <aside
       className={`
@@ -100,16 +76,11 @@ export function Sidebar() {
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              {loadingProjects ? (
-                <div className="flex items-center justify-center pt-2 pb-2 text-sm text-pink-200">
-                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                  Cargando...
-                </div>
-              ) : proyectos.length > 0 ? (
-                proyectos.map((item) => (
+              {visibleProjects.length > 0 ? (
+                visibleProjects.map((item) => (
                   <Link
                     key={item.id}
-                    href={`http://localhost:3000/projects/${item.id}` }
+                    href={`/projects/${item.id}`}
                     className="block px-4 py-2 text-sm text-white hover:bg-pink-700 transition-colors"
                   >
                     {item.name}
