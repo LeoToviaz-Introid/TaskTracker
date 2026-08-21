@@ -14,7 +14,7 @@ export default async function Page({ params }: PageProps) {
       <Header
         title={<h2>{project.name}</h2>}
         text={`${completedTasks.length}/${projectTasks.length}`}
-        button={<NewTaskButton />}
+        button={<NewTaskButton projectId={id} />}
         description={
           <p className="text-sm text-gray-300">{project.description}</p>
         }

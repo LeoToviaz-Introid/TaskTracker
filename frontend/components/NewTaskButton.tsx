@@ -10,7 +10,7 @@ import { X } from "lucide-react";
 import { refreshTag } from "@/app/actions";
 import { request } from "@/app/api"
 
-export default function NewTaskButton({ text = "Nueva Tarea" }) {
+export default function NewTaskButton({ text = "Nueva Tarea", projectId }) {
   // true cuando este siendo mostrado el popup de nuevo proyecto y false en caso contrario
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -24,6 +24,7 @@ export default function NewTaskButton({ text = "Nueva Tarea" }) {
       </button>
 
       <NewTaskPopup
+        projectId={projectId}
         formTitle={text}
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
@@ -32,7 +33,7 @@ export default function NewTaskButton({ text = "Nueva Tarea" }) {
   );
 }
 
-function NewTaskPopup({ formTitle, isOpen, onClose }) {
+function NewTaskPopup({ formTitle, projectId, isOpen, onClose }) {
   // estos check ayudan a verificar que el componente no se renderice
   // fuera del navegador, intentar acceder a document.body causará error
   if (!isOpen || typeof window === "undefined") return null;
@@ -47,17 +48,17 @@ function NewTaskPopup({ formTitle, isOpen, onClose }) {
           <X className="w-5 h-5" />
         </button>
         <h3 className="text-xl font-semibold mb-4">{formTitle}</h3>
-        <NewTaskForm onClose={onClose} />
+        <NewTaskForm projectId={projectId} onClose={onClose} />
       </div>
     </div>,
     document.body,
   );
 }
 
-function NewTaskForm({ onClose }) {
+function NewTaskForm({ projectId, onClose }) {
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
-  const [taskProjectId, setTaskProjectId] = useState("");
+  //const [taskProjectId, setTaskProjectId] = useState("");
   const [taskEstado, setTaskEstado] = useState("");
   const [taskPriority, setTaskPriority] = useState("");
   const [taskDueDate, setTaskDueDate] = useState("");
@@ -89,11 +90,11 @@ function NewTaskForm({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
+    console.log(projectId);
     const data = {
       name: taskName,
       description: taskDescription,
-      project: Number(taskProjectId),
+      project: Number(projectId),
       estado: taskEstado,
       priority: taskPriority,
       due_date: taskDueDate,
@@ -111,7 +112,6 @@ function NewTaskForm({ onClose }) {
     // limpiar el formulario y cerrar
     setTaskName("");
     setTaskDescription("");
-    setTaskProjectId("");
     setTaskEstado("");
     setTaskPriority("");
     setTaskDueDate("");
@@ -145,26 +145,6 @@ function NewTaskForm({ onClose }) {
           placeholder="Escribe la descripción"
           className="w-full px-3 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-pink-500"
         />
-        {/* -------- Proyecto -------- */}
-        <label className="block text-sm font-medium mt-3 mb-1">Proyecto</label>
-        <select
-          required
-          value={taskProjectId}
-          onChange={(e) => setTaskProjectId(e.target.value)}
-          disabled={loadingProjects}
-          className="w-full px-3 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-pink-500 cursor-pointer disabled:opacity-50"
-        >
-          <option value="" disabled>
-            {loadingProjects
-              ? "Cargando proyectos..."
-              : "Selecciona un proyecto"}
-          </option>
-          {projects.map((project) => (
-            <option key={project.id} value={project.id}>
-              {project.name}
-            </option>
-          ))}
-        </select>
         {/* -------- Estado -------- */}
         <label className="block text-sm font-medium mt-1 mb-1">Estado</label>
         <select
